@@ -16,7 +16,7 @@ st.subheader("Racial Distribution of Hospital Admissions (Demo Dataset)")
 # -----------------------------------------------------------
 @st.cache_data
 def load_admissions():
-    admissions = pd.read_csv('mimic-iv-clinical-database-demo-2.2/hosp/admissions.csv')
+    admissions = pd.read_csv('admissions.csv')
 
     # Function to simplify race
     def simplify_race(x):
