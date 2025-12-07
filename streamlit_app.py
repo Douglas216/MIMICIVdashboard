@@ -121,5 +121,5 @@ with col2:
 st.write("### Marital Status")
 categorical_bar(admissions, "marital_status", "Marital Status")
 
-    st.write("### Marital Status")
-    categorical_bar(admissions, "marital_status", "Marital Status")
+st.write("### Marital Status")
+categorical_bar(admissions, "marital_status", "Marital Status")
