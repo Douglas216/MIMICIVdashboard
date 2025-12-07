@@ -45,7 +45,7 @@ admissions = load_admissions()
 # -----------------------------------------------------------
 # Race distribution
 # -----------------------------------------------------------
-st.write("### Admissions by Race (simplified)")
+st.write("### Race")
 
 # Altair bar chart directly from the simplified column
 chart = (
