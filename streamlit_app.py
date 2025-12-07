@@ -55,6 +55,44 @@ def load_admissions():
     admissions["admission_loc_simple"] = admissions["admission_location"].apply(
         simplify_admission_location
     )
+
+    def simplify_admission_type(x):
+        if pd.isna(x):
+            return "Other"
+
+        x = str(x).upper()
+
+        if "EMER" in x or "URGENT" in x:
+            return "Emergency / Urgent"
+        if "OBSERVATION" in x:
+            return "Observation"
+        if "SURGICAL SAME DAY" in x or "ELECTIVE" in x:
+            return "Elective / Scheduled"
+        return "Other"
+
+    admissions["admission_type_simple"] = admissions["admission_type"].apply(
+        simplify_admission_type
+    )
+
+    def simplify_discharge_location(x):
+        if pd.isna(x):
+            return "Other / Unknown"
+
+        x = str(x).upper()
+
+        if "DIED" in x or "HOSPICE" in x:
+            return "Death / Hospice"
+        if "HOME" in x or "AGAINST ADVICE" in x:
+            return "Home / Community"
+        if "SKILLED NURSING" in x or "REHAB" in x:
+            return "Skilled Nursing / Rehab"
+        if "CHRONIC" in x or "LONG TERM" in x or "ACUTE HOSPITAL" in x or "PSYCH" in x:
+            return "Other Facility"
+        return "Other / Unknown"
+
+    admissions["discharge_loc_simple"] = admissions["discharge_location"].apply(
+        simplify_discharge_location
+    )
     return admissions
 
 
@@ -118,3 +156,14 @@ with col3:
 with col4:
     st.write("### Marital Status")
     categorical_bar(admissions, "marital_status", "Marital Status")
+
+
+col5, col6 = st.columns(2)
+
+with col5:
+    st.write("### Admission Type (simplified)")
+    categorical_bar(admissions, "admission_type_simple", "Admission Type")
+
+with col6:
+    st.write("### Discharge Location (simplified)")
+    categorical_bar(admissions, "discharge_loc_simple", "Discharge Location")
