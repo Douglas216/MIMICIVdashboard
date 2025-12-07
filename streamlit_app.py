@@ -48,7 +48,12 @@ chart = (
     alt.Chart(admissions)
     .mark_bar()
     .encode(
-        x=alt.X("race_simplified:N", sort="-y", title="Race"),
+        x=alt.X(
+            "race_simplified:N",
+            sort=["White", "Black", "Hispanic / Latino", "Other / Unknown"],
+            title="Race",
+            axis=alt.Axis(labelAngle=0),
+        ),
         y=alt.Y("count():Q", title="Number of Admissions"),
         color=alt.Color("race_simplified:N", legend=None),
         tooltip=[alt.Tooltip("race_simplified:N", title="Race"), alt.Tooltip("count():Q", title="Count")],
