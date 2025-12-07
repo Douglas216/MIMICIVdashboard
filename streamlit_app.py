@@ -196,10 +196,10 @@ st.caption(
 )
 
 field_labels = {
-    "race_simplified": "Race (simplified)",
-    "admission_loc_simple": "Admission Location (simplified)",
-    "admission_type_simple": "Admission Type (simplified)",
-    "discharge_loc_simple": "Discharge Location (simplified)",
+    "race_simplified": "Race",
+    "admission_loc_simple": "Admission Location",
+    "admission_type_simple": "Admission Type",
+    "discharge_loc_simple": "Discharge Location",
     "insurance": "Insurance",
     "marital_status": "Marital Status",
 }
@@ -208,7 +208,7 @@ label_to_field = {v: k for k, v in field_labels.items()}
 selected_labels = st.multiselect(
     "Choose up to 3 categorical variables",
     options=list(field_labels.values()),
-    default=["Race (simplified)", "Admission Type (simplified)"],
+    default=["Race", "Admission Type"],
     max_selections=3,
 )
 
