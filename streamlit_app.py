@@ -16,7 +16,6 @@ st.subheader("Racial Distribution of Hospital Admissions (Demo Dataset)")
 # -----------------------------------------------------------
 @st.cache_data
 def load_admissions():
-    # CSV path is relative to the repo root
     admissions = pd.read_csv("data/admissions.csv")
 
     # Simplify race categories
@@ -61,3 +60,34 @@ chart = (
 )
 
 st.altair_chart(chart, use_container_width=True)
+
+
+# -----------------------------------------------------------
+# Additional categorical bar charts
+# -----------------------------------------------------------
+def categorical_bar(df, column, title):
+    chart = (
+        alt.Chart(df)
+        .mark_bar()
+        .encode(
+            x=alt.X(f"{column}:N", sort="-y", title=title, axis=alt.Axis(labelAngle=0)),
+            y=alt.Y("count():Q", title="Number of Admissions"),
+            color=alt.Color(f"{column}:N", legend=None),
+            tooltip=[
+                alt.Tooltip(f"{column}:N", title=title),
+                alt.Tooltip("count():Q", title="Count"),
+            ],
+        )
+    )
+    st.altair_chart(chart, use_container_width=True)
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+    st.write("### Insurance")
+    categorical_bar(admissions, "insurance", "Insurance")
+
+with col2:
+    st.write("### Marital Status")
+    categorical_bar(admissions, "marital_status", "Marital Status")
