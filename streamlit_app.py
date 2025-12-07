@@ -102,12 +102,17 @@ admissions = load_admissions()
 # -----------------------------------------------------------
 # Helper for categorical bar charts
 # -----------------------------------------------------------
-def categorical_bar(df, column, title):
+def categorical_bar(df, column, title, sort_order="-y"):
     chart = (
         alt.Chart(df)
         .mark_bar()
         .encode(
-            x=alt.X(f"{column}:N", sort="-y", title=title, axis=alt.Axis(labelAngle=0)),
+            x=alt.X(
+                f"{column}:N",
+                sort=sort_order,
+                title=title,
+                axis=alt.Axis(labelAngle=0),
+            ),
             y=alt.Y("count():Q", title="Number of Admissions"),
             color=alt.Color(f"{column}:N", legend=None),
             tooltip=[
@@ -166,4 +171,16 @@ with col5:
 
 with col6:
     st.write("### Discharge Location")
-    categorical_bar(admissions, "discharge_loc_simple", "Discharge Location")
+    discharge_sort = [
+        "Death / Hospice",
+        "Home / Community",
+        "Skilled Nursing / Rehab",
+        "Other Facility",
+        "Other / Unknown",
+    ]
+    categorical_bar(
+        admissions,
+        "discharge_loc_simple",
+        "Discharge Location",
+        sort_order=discharge_sort,
+    )
