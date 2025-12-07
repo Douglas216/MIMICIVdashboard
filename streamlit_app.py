@@ -184,3 +184,74 @@ with col6:
         "Discharge Location",
         sort_order=discharge_sort,
     )
+
+
+# -----------------------------------------------------------
+# Contingency tables (up to 3 categorical variables)
+# -----------------------------------------------------------
+st.write("### Contingency Tables (counts)")
+st.caption(
+    "Select up to three categorical fields. The first becomes rows, the second columns, "
+    "and the third (optional) facets into separate tables."
+)
+
+field_labels = {
+    "race_simplified": "Race (simplified)",
+    "admission_loc_simple": "Admission Location (simplified)",
+    "admission_type_simple": "Admission Type (simplified)",
+    "discharge_loc_simple": "Discharge Location (simplified)",
+    "insurance": "Insurance",
+    "marital_status": "Marital Status",
+}
+label_to_field = {v: k for k, v in field_labels.items()}
+
+selected_labels = st.multiselect(
+    "Choose up to 3 categorical variables",
+    options=list(field_labels.values()),
+    default=["Race (simplified)", "Admission Type (simplified)"],
+    max_selections=3,
+)
+
+selected_fields = [label_to_field[label] for label in selected_labels]
+
+def render_crosstab(df, row_field, col_field=None, facet_field=None):
+    def friendly(name):
+        return field_labels.get(name, name)
+
+    def show_table(sub_df, facet_val=None):
+        if col_field:
+            table = pd.crosstab(sub_df[row_field], sub_df[col_field], margins=False)
+        else:
+            table = sub_df[row_field].value_counts().rename("Count").to_frame()
+
+        if col_field:
+            table.index.name = friendly(row_field)
+            table.columns.name = friendly(col_field)
+
+        title_parts = []
+        if facet_field:
+            title_parts.append(f"{friendly(facet_field)}: {facet_val}")
+        sample_size = len(sub_df)
+        if sample_size == 0:
+            st.info("No rows for this slice.")
+            return
+        if title_parts:
+            st.write(f"**{', '.join(title_parts)}** (n={sample_size})")
+        st.dataframe(table)
+
+    if facet_field:
+        for facet_val in sorted(admissions[facet_field].dropna().unique()):
+            subset = df[df[facet_field] == facet_val]
+            show_table(subset, facet_val)
+    else:
+        show_table(df)
+
+
+if not selected_fields:
+    st.info("Select 1–3 variables to see a contingency table.")
+else:
+    row_field = selected_fields[0]
+    col_field = selected_fields[1] if len(selected_fields) >= 2 else None
+    facet_field = selected_fields[2] if len(selected_fields) == 3 else None
+
+    render_crosstab(admissions, row_field, col_field, facet_field)
