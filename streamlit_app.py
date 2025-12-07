@@ -62,12 +62,6 @@ admissions = load_admissions()
 
 
 # -----------------------------------------------------------
-# Race distribution
-# -----------------------------------------------------------
-st.write("### Race and Admission Location")
-
-
-# -----------------------------------------------------------
 # Helper for categorical bar charts
 # -----------------------------------------------------------
 def categorical_bar(df, column, title):
@@ -114,9 +108,6 @@ with col1:
 with col2:
     st.write("#### Admission Location")
     categorical_bar(admissions, "admission_loc_simple", "Admission Location")
-
-
-st.write("### Insurance and Marital Status")
 
 col3, col4 = st.columns(2)
 
