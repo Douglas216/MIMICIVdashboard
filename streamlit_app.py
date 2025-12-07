@@ -41,36 +41,18 @@ admissions = load_admissions()
 # -----------------------------------------------------------
 # Race distribution
 # -----------------------------------------------------------
-st.write("### Simplified Race Distribution")
+st.write("### Admissions by Race (simplified)")
 
-# Build counts table
-race_counts = (
-    admissions["race_simplified"]
-    .value_counts()
-    .reset_index(name="Count")      # count column
-    .rename(columns={"index": "Race"})  # label column
-)
-
-# (Optional) debug print – safe to keep or remove later
-st.write("Race counts dataframe:")
-st.write(race_counts)
-st.write("Columns:", race_counts.columns.tolist())
-st.write("Number of rows:", len(race_counts))
-
-# Altair bar chart
+# Altair bar chart directly from the simplified column
 chart = (
-    alt.Chart(race_counts)
+    alt.Chart(admissions)
     .mark_bar()
     .encode(
-        x=alt.X("Race:N", sort="-y", title="Race"),
-        y=alt.Y("Count:Q", title="Number of Admissions"),
-        color=alt.Color("Race:N", legend=None),
-        tooltip=["Race", "Count"],
+        x=alt.X("race_simplified:N", sort="-y", title="Race"),
+        y=alt.Y("count():Q", title="Number of Admissions"),
+        color=alt.Color("race_simplified:N", legend=None),
+        tooltip=[alt.Tooltip("race_simplified:N", title="Race"), alt.Tooltip("count():Q", title="Count")],
     )
 )
 
 st.altair_chart(chart, use_container_width=True)
-
-# Show numeric table
-st.write("### Table of Counts")
-st.dataframe(race_counts)
