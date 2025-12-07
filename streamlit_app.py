@@ -36,6 +36,26 @@ def load_admissions():
         .fillna("Unknown")
         .replace({"?": "Unknown", "": "Unknown"})
     )
+
+    def simplify_admission_location(x):
+        if pd.isna(x):
+            return "Unknown"
+
+        x = str(x).upper()
+
+        if "EMERGENCY" in x:
+            return "Emergency"
+        if any(keyword in x for keyword in ["REFERRAL", "WALK-IN", "SELF", "PROCEDURE"]):
+            return "Referral"
+        if "TRANSFER" in x:
+            return "Transfer"
+        if "PACU" in x:
+            return "PACU"
+        return "Unknown"
+
+    admissions["admission_loc_simple"] = admissions["admission_location"].apply(
+        simplify_admission_location
+    )
     return admissions
 
 
@@ -90,9 +110,16 @@ def categorical_bar(df, column, title):
 col1, col2 = st.columns(2)
 
 with col1:
+    st.write("### Admission Location (simplified)")
+    categorical_bar(admissions, "admission_loc_simple", "Admission Location")
+
+with col2:
     st.write("### Insurance")
     categorical_bar(admissions, "insurance", "Insurance")
 
-with col2:
+
+st.write("### Marital Status")
+categorical_bar(admissions, "marital_status", "Marital Status")
+
     st.write("### Marital Status")
     categorical_bar(admissions, "marital_status", "Marital Status")
