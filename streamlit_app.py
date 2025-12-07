@@ -31,6 +31,11 @@ def load_admissions():
         return "Other / Unknown"
 
     admissions["race_simplified"] = admissions["race"].apply(simplify_race)
+    admissions["marital_status"] = (
+        admissions["marital_status"]
+        .fillna("Unknown")
+        .replace({"?": "Unknown", "": "Unknown"})
+    )
     return admissions
 
 
