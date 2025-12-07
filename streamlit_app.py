@@ -16,30 +16,22 @@ st.subheader("Racial Distribution of Hospital Admissions (Demo Dataset)")
 # -----------------------------------------------------------
 @st.cache_data
 def load_admissions():
-    admissions = pd.read_csv('data/admissions.csv')
+    # CSV path is relative to the repo root
+    admissions = pd.read_csv("data/admissions.csv")
 
-    # Function to simplify race
+    # Simplify race categories
     def simplify_race(x):
         x = str(x).upper()
 
-        # Hispanic / Latino
         if "HISPANIC" in x or "LATINO" in x:
             return "Hispanic / Latino"
-
-        # Black
         if "BLACK" in x:
             return "Black"
-
-        # White
         if "WHITE" in x or x in ["PORTUGUESE"]:
             return "White"
-
-        # Other / Unknown
         return "Other / Unknown"
 
-    # Apply mapping
     admissions["race_simplified"] = admissions["race"].apply(simplify_race)
-
     return admissions
 
 
@@ -47,19 +39,23 @@ admissions = load_admissions()
 
 
 # -----------------------------------------------------------
-# Visualization
+# Race distribution
 # -----------------------------------------------------------
 st.write("### Simplified Race Distribution")
 
-st.write("Race counts dataframe:", race_counts)
-st.write("Columns:", race_counts.columns.tolist())
-
+# Build counts table
 race_counts = (
     admissions["race_simplified"]
     .value_counts()
-    .reset_index(name="Count")
-    .rename(columns={"index": "Race"})
+    .reset_index(name="Count")      # count column
+    .rename(columns={"index": "Race"})  # label column
 )
+
+# (Optional) debug print – safe to keep or remove later
+st.write("Race counts dataframe:")
+st.write(race_counts)
+st.write("Columns:", race_counts.columns.tolist())
+st.write("Number of rows:", len(race_counts))
 
 # Altair bar chart
 chart = (
@@ -71,11 +67,10 @@ chart = (
         color=alt.Color("Race:N", legend=None),
         tooltip=["Race", "Count"],
     )
-    .properties(width=600, height=400)
 )
 
 st.altair_chart(chart, use_container_width=True)
 
-# Display numeric counts
+# Show numeric table
 st.write("### Table of Counts")
 st.dataframe(race_counts)
