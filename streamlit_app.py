@@ -8,7 +8,6 @@ import altair as alt
 st.set_page_config(page_title="MIMIC-IV Demo Dashboard", layout="wide")
 
 st.title("MIMIC-IV Demo Dashboard")
-st.subheader("Racial Distribution of Hospital Admissions (Demo Dataset)")
 
 
 # -----------------------------------------------------------
@@ -118,7 +117,13 @@ with col2:
     categorical_bar(admissions, "insurance", "Insurance")
 
 
-st.write("### Marital Status")
-categorical_bar(admissions, "marital_status", "Marital Status")
+col3, col4 = st.columns(2)
+
+with col3:
+    st.write("### Marital Status")
+    categorical_bar(admissions, "marital_status", "Marital Status")
+
+with col4:
+    st.empty()  # placeholder to keep two-column layout
 
 
