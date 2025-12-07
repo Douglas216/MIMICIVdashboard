@@ -64,30 +64,11 @@ admissions = load_admissions()
 # -----------------------------------------------------------
 # Race distribution
 # -----------------------------------------------------------
-st.write("### Race")
-
-# Altair bar chart directly from the simplified column
-chart = (
-    alt.Chart(admissions)
-    .mark_bar()
-    .encode(
-        x=alt.X(
-            "race_simplified:N",
-            sort=["White", "Black", "Hispanic / Latino", "Other / Unknown"],
-            title="Race",
-            axis=alt.Axis(labelAngle=0),
-        ),
-        y=alt.Y("count():Q", title="Number of Admissions"),
-        color=alt.Color("race_simplified:N", legend=None),
-        tooltip=[alt.Tooltip("race_simplified:N", title="Race"), alt.Tooltip("count():Q", title="Count")],
-    )
-)
-
-st.altair_chart(chart, use_container_width=True)
+st.write("### Race and Admission Location")
 
 
 # -----------------------------------------------------------
-# Additional categorical bar charts
+# Helper for categorical bar charts
 # -----------------------------------------------------------
 def categorical_bar(df, column, title):
     chart = (
@@ -109,21 +90,40 @@ def categorical_bar(df, column, title):
 col1, col2 = st.columns(2)
 
 with col1:
-    st.write("### Admission Location")
-    categorical_bar(admissions, "admission_loc_simple", "Admission Location")
+    st.write("#### Race")
+    race_chart = (
+        alt.Chart(admissions)
+        .mark_bar()
+        .encode(
+            x=alt.X(
+                "race_simplified:N",
+                sort=["White", "Black", "Hispanic / Latino", "Other / Unknown"],
+                title="Race",
+                axis=alt.Axis(labelAngle=0),
+            ),
+            y=alt.Y("count():Q", title="Number of Admissions"),
+            color=alt.Color("race_simplified:N", legend=None),
+            tooltip=[
+                alt.Tooltip("race_simplified:N", title="Race"),
+                alt.Tooltip("count():Q", title="Count"),
+            ],
+        )
+    )
+    st.altair_chart(race_chart, use_container_width=True)
 
 with col2:
-    st.write("### Insurance")
-    categorical_bar(admissions, "insurance", "Insurance")
+    st.write("#### Admission Location")
+    categorical_bar(admissions, "admission_loc_simple", "Admission Location")
 
+
+st.write("### Insurance and Marital Status")
 
 col3, col4 = st.columns(2)
 
 with col3:
-    st.write("### Marital Status")
-    categorical_bar(admissions, "marital_status", "Marital Status")
+    st.write("### Insurance")
+    categorical_bar(admissions, "insurance", "Insurance")
 
 with col4:
-    st.empty()  # placeholder to keep two-column layout
-
-
+    st.write("### Marital Status")
+    categorical_bar(admissions, "marital_status", "Marital Status")
