@@ -51,11 +51,14 @@ admissions = load_admissions()
 # -----------------------------------------------------------
 st.write("### Simplified Race Distribution")
 
+st.write("Race counts dataframe:", race_counts)
+st.write("Columns:", race_counts.columns.tolist())
+
 race_counts = (
     admissions["race_simplified"]
     .value_counts()
-    .reset_index()
-    .rename(columns={"index": "Race", "race_simplified": "Count"})
+    .reset_index(name="Count")
+    .rename(columns={"index": "Race"})
 )
 
 # Altair bar chart
