@@ -110,7 +110,7 @@ def categorical_bar(df, column, title):
 col1, col2 = st.columns(2)
 
 with col1:
-    st.write("### Admission Location (simplified)")
+    st.write("### Admission Location")
     categorical_bar(admissions, "admission_loc_simple", "Admission Location")
 
 with col2:
@@ -121,5 +121,4 @@ with col2:
 st.write("### Marital Status")
 categorical_bar(admissions, "marital_status", "Marital Status")
 
-st.write("### Marital Status")
-categorical_bar(admissions, "marital_status", "Marital Status")
+
