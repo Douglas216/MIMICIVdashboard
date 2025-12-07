@@ -161,9 +161,9 @@ with col4:
 col5, col6 = st.columns(2)
 
 with col5:
-    st.write("### Admission Type (simplified)")
+    st.write("### Admission Type")
     categorical_bar(admissions, "admission_type_simple", "Admission Type")
 
 with col6:
-    st.write("### Discharge Location (simplified)")
+    st.write("### Discharge Location")
     categorical_bar(admissions, "discharge_loc_simple", "Discharge Location")
